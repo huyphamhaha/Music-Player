@@ -140,14 +140,21 @@ const app  = {
         //Xử Lý khi click button Play 
         playBtn.onclick = function(){
             if(_this.isPlaying) {
-                _this.isPlaying = false
-                audio.pause()
-                player.classList.remove('playing')   
+                audio.pause()  
             } else {
-                _this.isPlaying = true
-                audio.play()
-                player.classList.add('playing')   
+                audio.play()  
             }
+        }
+
+        audio.onplay = function(){
+            player.classList.add('playing')   
+            _this.isPlaying = true
+        }
+
+        
+        audio.onpause = function(){
+            player.classList.remove('playing')   
+            _this.isPlaying = false
         }
 
         //Sử lý phóng to thu nhỏ cd
