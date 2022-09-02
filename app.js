@@ -6,18 +6,27 @@ const playlist = $('.playlist')
 
 
 const cd = $('.cd')
+const playBtn = $('.btn-toggle-play')
 
-const heading  = $('header h2')
-const cdthumb = $('.cd-thumb')
+const cdThumb = $('.cd-thumb')
+const heading = $('header h2')
 const audio = $('#audio')
 
-const playBtn = $('.btn-toggle-play')
 const player = $('.player')
 
 
 const app  = {
     currentIndex :  0,
+    isPlaying : false,
     songs:  [
+        
+        {
+            name : 'Love Dive',
+            singer : 'IVE',
+            path : './asstets/music/song (11).mp3',
+            image : './asstets/img/song (11).jpg'
+    
+        },
         {
             name : 'Em không lẻ loi',
             singer : 'Justaate',
@@ -127,11 +136,18 @@ const app  = {
 
     handelEvents : function(){
         const cdWidth = cd.offsetWidth
+        const _this = this
         //Xử Lý khi click button Play 
         playBtn.onclick = function(){
-            audio.play()
-            player.classList.add('playing')
-
+            if(_this.isPlaying) {
+                _this.isPlaying = false
+                audio.pause()
+                player.classList.remove('playing')   
+            } else {
+                _this.isPlaying = true
+                audio.play()
+                player.classList.add('playing')   
+            }
         }
 
         //Sử lý phóng to thu nhỏ cd
@@ -146,9 +162,9 @@ const app  = {
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name,
-        cdthumb.style.backgroundImage = `url('${this.currentSong.image}')`
+        cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path
-    },  
+    },
 
     start : function(){
         this.defineProperties()
