@@ -209,19 +209,29 @@ const app  = {
         
         //Khi next bài hát
         nextBtn.onclick = function(){
-            _this.nextSong()
-            audio.play()
+            if(_this.isRandom){
+                _this.playRandomSong()
+            } else {
+                _this.nextSong()
+            }
+            audio.play()    
         }
 
         //Khi prev bài hát
         prevBtn.onclick = function(){
-            _this.prevSong()
-            audio.play()
+            if(_this.isRandom){
+                _this.playRandomSong()
+            } else {
+                _this.prevSong()
+            }
+            audio.play()    
         }
 
         //Khi nhấn vào nút random
         randomBtn.onclick = function(){
             randomBtn.classList.toggle('active')
+            _this.isRandom = !_this.isRandom
+
         }
     },
     loadCurrentSong: function(){
@@ -247,10 +257,16 @@ const app  = {
         this.loadCurrentSong()
     },
 
-    
-    
+    playRandomSong : function(){
+        let newIndex 
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length);
+        }
+        while(newIndex === this.currentIndex)
 
-
+        this.currentIndex = newIndex
+        this.loadCurrentSong()
+    },
 
     start : function(){
         this.defineProperties()
