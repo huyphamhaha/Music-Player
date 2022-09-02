@@ -4,12 +4,24 @@ const $$ = document.querySelectorAll.bind(document)
 
 const playlist = $('.playlist')
 
+
+const cd = $('.cd')
+
+const heading  = $('header h2')
+const cdthumb = $('.cd-thumb')
+const audio = $('#audio')
+
+const playBtn = $('.btn-toggle-play')
+const player = $('.player')
+
+
 const app  = {
+    currentIndex :  0,
     songs:  [
         {
             name : 'Em không lẻ loi',
             singer : 'Justaate',
-            path : './assets/song (1).mp3',
+            path : './asstets/music/song (1).mp3',
             image : './asstets/img/song (1).jpg'
     
         },
@@ -17,7 +29,7 @@ const app  = {
         {
             name : 'Leyla',
             singer : 'unknow singer',
-            path : './assets/song (2).mp3',
+            path : './asstets/music/song (2).mp3',
             image : './asstets/img/song (2).jpg'
     
         },
@@ -25,7 +37,7 @@ const app  = {
         {
             name : 'Nơi này có anh',
             singer : 'Sơn Tùng MTP',
-            path : './assets/song (3).mp3',
+            path : './asstets/music/song (3).mp3',
             image : './asstets/img/song (3).jpg'
     
         },
@@ -33,7 +45,7 @@ const app  = {
         {
             name : 'Muộn rồi mà sao còn',
             singer : 'Sơn Tùng MTP',
-            path : './assets/song (4).mp3',
+            path : './asstets/music/song (4).mp3',
             image : './asstets/img/song (4).jpg'
     
         },
@@ -41,7 +53,7 @@ const app  = {
         {
             name : 'Thằng Điên',
             singer : 'Justaate',
-            path : './assets/song (5).mp3',
+            path : './asstets/music/song (5).mp3',
             image : './asstets/img/song (5).jpg'
     
         },
@@ -49,7 +61,7 @@ const app  = {
         {
             name : 'Bad Habits',
             singer : 'Ed sheeran',
-            path : './assets/song (6).mp3',
+            path : './asstets/music/song (6).mp3',
             image : './asstets/img/song (6).jpg'
     
         },
@@ -57,7 +69,7 @@ const app  = {
         {
             name : 'Lego House',
             singer : 'Ed Sheeran',
-            path : './assets/song (7).mp3',
+            path : './asstets/music/song (7).mp3',
             image : './asstets/img/song (7).jpg'
     
         },
@@ -65,7 +77,7 @@ const app  = {
         {
             name : 'Trời hôm nay nhiều mây cực',
             singer : 'Đen Vâu',
-            path : './assets/song (8).mp3',
+            path : './asstets/music/song (8).mp3',
             image : './asstets/img/song (8).jpg'
     
         },
@@ -73,7 +85,7 @@ const app  = {
         {
             name : 'Overpass Graffiti',
             singer : 'Ed Sheeran',
-            path : './assets/song (9).mp3',
+            path : './asstets/music/song (9).mp3',
             image : './asstets/img/song (9).jpg'
     
         },
@@ -81,7 +93,7 @@ const app  = {
         {
             name : 'Shape Of You',
             singer : 'Ed Sheeran',
-            path : './assets/song (10).mp3',
+            path : './asstets/music/song (10).mp3',
             image : './asstets/img/song (10).jpg'
     
         }
@@ -105,25 +117,46 @@ const app  = {
         })
         $('.playlist').innerHTML = htmls.join('')
     },
-    
+    defineProperties : function(){
+        Object.defineProperty(this, 'currentSong', {
+            get : function(){
+                return this.songs[this.currentIndex]
+            }
+        })
+    },
+
     handelEvents : function(){
-        const cd = $('.cd')
         const cdWidth = cd.offsetWidth
+        //Xử Lý khi click button Play 
+        playBtn.onclick = function(){
+            audio.play()
+            player.classList.add('playing')
 
+        }
+
+        //Sử lý phóng to thu nhỏ cd
         document.onscroll = function(){
-            
             const scrollTop = window.scrollY || document.documentElement.scrollTop
-            const newCdWidth = cdWidth - scrollTop
+            const cdNewWidth = cdWidth - scrollTop
 
-            cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0
-            cd.style.opacity = newCdWidth/cdWidth
-            
+            cd.style.width = cdNewWidth > 0 ? cdNewWidth + 'px' : 0
+            cd.style.opacity = cdNewWidth/cdWidth
         }
 
     },
+    loadCurrentSong: function(){
+        heading.textContent = this.currentSong.name,
+        cdthumb.style.backgroundImage = `url('${this.currentSong.image}')`
+        audio.src = this.currentSong.path
+    },  
 
     start : function(){
+        this.defineProperties()
+
         this.handelEvents()
+
+        this.loadCurrentSong()
+
         this.render()
     }
 
