@@ -16,10 +16,16 @@ const player = $('.player')
 
 const progress = $('.progress')
 
+const nextBtn = $('.btn-next')
+const prevBtn = $('.btn-prev')
+
+const randomBtn = $('.btn-random')
+
 
 const app  = {
     currentIndex :  0,
     isPlaying : false,
+    isRandom : false,
     songs:  [
         
         {
@@ -153,12 +159,14 @@ const app  = {
         audio.onplay = function(){
             player.classList.add('playing')   
             _this.isPlaying = true
+            cdThumbAnimate.play()
         }
 
         //Nút đang pause
         audio.onpause = function(){
             player.classList.remove('playing')   
-            _this.isPlaying = false
+            _this.isPlaying = false           
+            cdThumbAnimate.pause()
         }
 
         //Khi tiến độ bài hát thay đổi
@@ -178,6 +186,16 @@ const app  = {
 
 
         
+        //Xử lý cd quay và dừng
+        const cdThumbAnimate= cdThumb.animate([
+            {transform :'rotate(360deg)' }
+
+        ], {
+            duration: 10000,
+            iterations: Infinity 
+        })
+
+        cdThumbAnimate.pause()
 
         //Sử lý phóng to thu nhỏ cd
         document.onscroll = function(){
@@ -189,13 +207,51 @@ const app  = {
         }
 
         
+        //Khi next bài hát
+        nextBtn.onclick = function(){
+            _this.nextSong()
+            audio.play()
+        }
 
+        //Khi prev bài hát
+        prevBtn.onclick = function(){
+            _this.prevSong()
+            audio.play()
+        }
+
+        //Khi nhấn vào nút random
+        randomBtn.onclick = function(){
+            randomBtn.classList.toggle('active', _this.isRandom)
+            _this.isRandom = !_this.isRandom
+        }
     },
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name,
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path
     },
+
+    nextSong : function(){
+        this.currentIndex++
+        if(this.currentIndex >= this.songs.length){
+            this.currentIndex = 0
+        }
+        this.loadCurrentSong()
+    },
+
+    
+    prevSong : function(){
+        this.currentIndex--
+        if(this.currentIndex < 0){
+            this.currentIndex = this.songs.length - 1
+        }
+        this.loadCurrentSong()
+    },
+
+    
+    
+
+
 
     start : function(){
         this.defineProperties()
