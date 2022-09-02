@@ -14,6 +14,8 @@ const audio = $('#audio')
 
 const player = $('.player')
 
+const progress = $('.progress')
+
 
 const app  = {
     currentIndex :  0,
@@ -146,16 +148,36 @@ const app  = {
             }
         }
 
+        
+        //Nút đang play
         audio.onplay = function(){
             player.classList.add('playing')   
             _this.isPlaying = true
         }
 
-        
+        //Nút đang pause
         audio.onpause = function(){
             player.classList.remove('playing')   
             _this.isPlaying = false
         }
+
+        //Khi tiến độ bài hát thay đổi
+        audio.ontimeupdate = function(){
+            if(audio.duration){
+                const progressPercent = Math.floor(audio.currentTime / audio.duration*100)
+                progress.value = progressPercent
+            }
+        },
+
+        progress.oninput = function(e){
+            if (audio.duration){
+                const timeSeek = audio.duration / 100* e.target.value 
+                audio.currentTime = timeSeek 
+            }
+        }
+
+
+        
 
         //Sử lý phóng to thu nhỏ cd
         document.onscroll = function(){
@@ -165,6 +187,8 @@ const app  = {
             cd.style.width = cdNewWidth > 0 ? cdNewWidth + 'px' : 0
             cd.style.opacity = cdNewWidth/cdWidth
         }
+
+        
 
     },
     loadCurrentSong: function(){
