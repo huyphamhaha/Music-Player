@@ -221,8 +221,7 @@ const app  = {
 
         //Khi nhấn vào nút random
         randomBtn.onclick = function(){
-            randomBtn.classList.toggle('active', _this.isRandom)
-            _this.isRandom = !_this.isRandom
+            randomBtn.classList.toggle('active')
         }
     },
     loadCurrentSong: function(){
