@@ -138,7 +138,7 @@
 
   /* PLAYLIST */
   .playlist {
-    margin-top: 410px;
+    margin-top: 470px;
     padding: 12px 0;
   }
   
@@ -267,5 +267,35 @@
     box-shadow: 0 0 0 3px rgb(248, 235, 235), 0 0 7px rgba(100, 100, 111, 1);
 
 }
-  
 
+.footer {
+  height: 40px;
+  background-color: #333;
+}
+
+.info {
+  display: flex;
+  justify-content: center;
+  line-height: 40px;
+  color: #fff;
+}
+
+.copyright {
+  color: #fff;
+  font-size:16px;
+  font-weight: 500;
+  transition: 0.4s ease;
+  cursor: pointer;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.copyright:hover {
+  transform: scale(1.1);
+  color: #1db954;
+  
+}
