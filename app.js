@@ -21,13 +21,15 @@ const prevBtn = $('.btn-prev')
 
 const randomBtn = $('.btn-random')
 
+const repeatBtn = $('.btn-repeat')
+
 
 const app  = {
     currentIndex :  0,
     isPlaying : false,
     isRandom : false,
+    isRepeat : false,
     songs:  [
-        
         {
             name : 'Love Dive',
             singer : 'IVE',
@@ -115,11 +117,10 @@ const app  = {
     
         }
     ],
-
     render : function(){
-        const htmls = this.songs.map(function(song){
+        const htmls = this.songs.map(function(song, index){
             return `
-                <div class="song">
+                <div class="song ${index === app.currentIndex ? 'active' : ''}">
                     <div class="thumb" style="background-image: url('${song.image}')">
                 </div>
                 <div class="body">
@@ -133,6 +134,7 @@ const app  = {
             `
         })
         $('.playlist').innerHTML = htmls.join('')
+        
     },
     defineProperties : function(){
         Object.defineProperty(this, 'currentSong', {
@@ -206,7 +208,8 @@ const app  = {
             cd.style.opacity = cdNewWidth/cdWidth
         }
 
-        
+        nextBtn.onclick = 
+ 
         //Khi next bài hát
         nextBtn.onclick = function(){
             if(_this.isRandom){
@@ -214,7 +217,9 @@ const app  = {
             } else {
                 _this.nextSong()
             }
-            audio.play()    
+            audio.play()
+            _this.render()
+            _this.scrollToActiveSong()
         }
 
         //Khi prev bài hát
@@ -224,16 +229,45 @@ const app  = {
             } else {
                 _this.prevSong()
             }
-            audio.play()    
+            audio.play()
+            _this.render()
+            _this.scrollToActiveSong()
         }
 
         //Khi nhấn vào nút random
         randomBtn.onclick = function(){
-            randomBtn.classList.toggle('active')
             _this.isRandom = !_this.isRandom
+            randomBtn.classList.toggle('active')
+        }
+
+        //Xử lý khi bấm vào nút repeatBtn 
+        repeatBtn.onclick = function(){
+            _this.isRepeat = !_this.isRepeat     
+            repeatBtn.classList.toggle('active', _this.isRepeat)
+        } 
+
+
+        //Xử lý nextSong khi audio ended
+        audio.onended = function(){
+            if(_this.isRepeat){
+                audio.play();
+            } else {
+                nextBtn.click();
+            }
 
         }
+
     },
+
+    scrollToActiveSong : function(){
+        setTimeout(function(){
+            $('.song.active').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center'
+            })
+        }, 500)
+    },
+
     loadCurrentSong: function(){
         heading.textContent = this.currentSong.name,
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
