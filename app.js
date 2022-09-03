@@ -25,6 +25,7 @@ const randomBtn = $('.btn-random')
 
 const repeatBtn = $('.btn-repeat')
 
+//Volume
 const volume          = $('.volume')
 const volumeUp        = $('.volume-up')
 const volumeDown      = $('.volume-down')
@@ -288,6 +289,7 @@ const app  = {
             }
         }
 
+        //Volume
         volumeDown.onmousedown = function() {
             if (_this.currentVolume > 0) {
                 _this.currentVolume --
@@ -310,6 +312,7 @@ const app  = {
         
     },
 
+    //Volume
     changeVolume: function(index) {        
         volumeViewPercent.textContent = 'Volume '+ index + '%'
         audio.volume = index/100       
