@@ -279,8 +279,6 @@
   height: 15px;
   border-radius: 50%; 
   background-image: linear-gradient(to top, #0ba360 0%, #3cba92 100%);
-  
-  box-shadow: 0 0 0 3px rgb(248, 235, 235), 0 0 7px rgba(100, 100, 111, 1);
   cursor: pointer;
 }
 
