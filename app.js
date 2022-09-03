@@ -4,6 +4,8 @@ const $$ = document.querySelectorAll.bind(document)
 
 const playlist = $('.playlist')
 
+const PLAYER_STORAGE_KEY = 'F8_PLAYER'
+
 
 const cd = $('.cd')
 const playBtn = $('.btn-toggle-play')
@@ -29,7 +31,8 @@ const app  = {
     isPlaying : false,
     isRandom : false,
     isRepeat : false,
-    songs:  [
+    config : JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
+    songs :  [
         {
             name : 'Love Dive',
             singer : 'IVE',
@@ -117,10 +120,14 @@ const app  = {
     
         }
     ],
+    setconfig : function(key,value){
+        this.config[key] = value;
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    },
     render : function(){
         const htmls = this.songs.map(function(song, index){
             return `
-                <div class="song ${index === app.currentIndex ? 'active' : ''}">
+                <div class="song ${index === app.currentIndex ? 'active' : ''}" data-index = "${index}">
                     <div class="thumb" style="background-image: url('${song.image}')">
                 </div>
                 <div class="body">
@@ -237,12 +244,14 @@ const app  = {
         //Khi nhấn vào nút random
         randomBtn.onclick = function(){
             _this.isRandom = !_this.isRandom
-            randomBtn.classList.toggle('active')
+            _this.setconfig('isRandom', _this.isRandom)
+            randomBtn.classList.toggle('active', _this.isRandom)
         }
 
         //Xử lý khi bấm vào nút repeatBtn 
         repeatBtn.onclick = function(){
-            _this.isRepeat = !_this.isRepeat     
+            _this.isRepeat = !_this.isRepeat
+            _this.setconfig('isRepeat', _this.isRepeat)
             repeatBtn.classList.toggle('active', _this.isRepeat)
         } 
 
@@ -257,6 +266,20 @@ const app  = {
 
         }
 
+        //Lắng nghe hành vi click vào bài hát
+        playlist.onclick = function(e){
+            const songNode = e.target.closest('.song:not(.active)')
+            if(songNode || e.target.closest('.option') ){
+                //Xử lý click vào song
+                if(songNode){
+                    _this.currentIndex = Number(songNode.getAttribute('data-index'))
+                    _this.loadCurrentSong()
+                    _this.render()
+                    audio.play()
+                }
+                //Xử lý click vào option
+            }
+        }
     },
 
     scrollToActiveSong : function(){
@@ -266,6 +289,12 @@ const app  = {
                 block: 'center'
             })
         }, 500)
+    },
+
+    loadConfig : function(){
+        this.isRandom = this.config.isRandom;
+        this.isRepeat = this.config.isRepeat;
+
     },
 
     loadCurrentSong: function(){
@@ -303,13 +332,25 @@ const app  = {
     },
 
     start : function(){
+        //Gán cấu hình từ config vào app
+        this.loadConfig()
+
+        //Định Nghĩa Method Object
         this.defineProperties()
 
+        //Hàm xử lý sự kiến DOM
         this.handelEvents()
 
+        //Hàm tải bài hát
         this.loadCurrentSong()
 
+        //Hàm render lên trên web
         this.render()
+
+        
+        //Hiển thị trạng thái ban đầu của repeat và random
+        repeatBtn.classList.toggle('active', this.isRepeat)
+        randomBtn.classList.toggle('active', this.isRandom)
     }
 
 
