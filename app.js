@@ -25,8 +25,15 @@ const randomBtn = $('.btn-random')
 
 const repeatBtn = $('.btn-repeat')
 
+const volume          = $('.volume')
+const volumeUp        = $('.volume-up')
+const volumeDown      = $('.volume-down')
+const volumeViewPercent   = $('.volume-percent')
+
 
 const app  = {
+    maxVolume: 100,    
+    currentVolume: 100,
     currentIndex :  0,
     isPlaying : false,
     isRandom : false,
@@ -280,6 +287,32 @@ const app  = {
                 //Xử lý click vào option
             }
         }
+
+        volumeDown.onmousedown = function() {
+            if (_this.currentVolume > 0) {
+                _this.currentVolume --
+                _this.changeVolume(_this.currentVolume)
+                volume.value = _this.currentVolume
+            }
+        }
+        volumeUp.onmousedown = function() {
+            if (_this.currentVolume < 100) {
+                _this.currentVolume ++
+                _this.changeVolume(_this.currentVolume)
+                volume.value = _this.currentVolume
+            }
+        }
+        volume.onchange = function() {
+            _this.currentVolume = volume.value
+            _this.changeVolume(_this.currentVolume)
+            volume.value = _this.currentVolume
+        }
+        
+    },
+
+    changeVolume: function(index) {        
+        volumeViewPercent.textContent = 'Volume '+ index + '%'
+        audio.volume = index/100       
     },
 
     scrollToActiveSong : function(){
@@ -332,6 +365,7 @@ const app  = {
     },
 
     start : function(){
+
         //Gán cấu hình từ config vào app
         this.loadConfig()
 

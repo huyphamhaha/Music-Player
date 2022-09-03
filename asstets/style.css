@@ -221,4 +221,51 @@
 ::-webkit-scrollbar-thumb:hover {
   background: #333;
 }
+
+.volume-control {
+  width: 100%;
+}
+
+.volume {
+  width: 80%;
+  margin: 0 8px;
+  height: 6px;
+}
+
+.volume-wrap {
+  margin-top: 12px;
+}
+
+.volume-percent {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+
+}
+
+.volume-up, .volume-down {
+  color: #fff;
+}
+
+.volume-control {
+  margin-top: 6px;
+  display: flex;
+  justify-content: center  ;
+  align-items: center;
+}
+
+.volume::-webkit-slider-thumb {
+    -webkit-appearance: none; 
+    appearance: none;
+    width: 1px; 
+    height: 1px;  
+    cursor: pointer; 
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgb(248, 235, 235), 0 0 7px rgba(100, 100, 111, 1);
+
+}
   
+
